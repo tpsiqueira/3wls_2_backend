@@ -1,0 +1,159 @@
+:root {
+  --neutral-neutral-0: #ffffff;
+  --neutral-neutral-8: #1f1f1f;
+  --brandprimary-base: #047857;
+  --brandprimary-hover: #065f46;
+  --font-family: "Roboto", sans-serif;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+  font-family: var(--font-family);
+}
+
+.layout-login-left {
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+}
+
+.login-panel,
+.image-panel {
+  flex: 1 1 50%;
+  min-width: 0;
+  height: 100vh;
+}
+
+.login-panel {
+  background-color: var(--neutral-neutral-0);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 0 4vw;
+  position: relative;
+}
+
+.image-panel {
+  background-image: url('/static/nafto/LayoutLoginLeft/image.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.logo-container {
+  position: absolute;
+  top: 40px;
+  left: 4vw;
+}
+
+.logo-petrobras {
+  width: 197px;
+  height: 39px;
+}
+
+.login-content {
+  width: 100%;
+  max-width: 400px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.login-title {
+  font-size: 20px;
+  font-weight: 500;
+  color: var(--neutral-neutral-8);
+}
+
+.input {
+  width: 100%;
+}
+
+input[type="text"],
+input[type="password"] {
+  width: 100%;
+  padding: 12px 0;
+  border: none;
+  border-bottom: 1px solid #ccc;
+  font-size: 14px;
+  background-color: transparent;
+  outline: none;
+  transition: border-color 0.3s;
+}
+
+input[type="text"]:focus,
+input[type="password"]:focus {
+  border-color: var(--brandprimary-base);
+}
+
+.options-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 14px;
+  color: var(--neutral-neutral-8);
+}
+
+.remember-me {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.forgot-password {
+  color: var(--brandprimary-base);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.forgot-password:hover {
+  color: var(--brandprimary-hover);
+}
+
+.log-in-button {
+  background-color: var(--brandprimary-base);
+  border: none;
+  border-radius: 4px;
+  height: 48px;
+  width: 100%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.2s ease-in-out;
+}
+
+.log-in-button:hover {
+  background-color: var(--brandprimary-hover);
+}
+
+.log-in-button .text {
+  color: white;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 24px;
+  white-space: nowrap;
+}
+
+.logo-container {
+  position: absolute;
+  top: 40px;
+  left: 4vw;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 16px;
+  flex-wrap: wrap;
+  max-width: 90%;
+}
+

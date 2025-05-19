@@ -1,0 +1,26 @@
+# Byte-compiled / optimized / DLL files
+__pycache__
+*.py[cod]
+*$py.class
+
+# VS Code configuration
+.vscode/
+
+# Log files
+*.log
+
+# Anima
+.anima
+
+# Virtual env
+.env
+gid_venv/
+
+# Databases
+#gideao_project/db_dev.sqlite3
+
+#Node modules
+3wls_frontend/node_modules/
+
+#Anima
+.anima/
