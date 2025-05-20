@@ -2,7 +2,7 @@ from rest_framework import serializers
 from prod_app import models as prod
 from perf_app import models as perf
 
-# === Serializers do prod_app ===
+# === MODELOS DO prod_app ===
 class UOSerializer(serializers.ModelSerializer):
     class Meta:
         model = prod.uo
@@ -63,7 +63,7 @@ class RelacaoEspecialistaIndustrialSerializer(serializers.ModelSerializer):
         model = prod.relacao_especialista_industrial
         fields = '__all__'
 
-# === Serializers do perf_app ===
+# === MODELOS DO perf_app ===
 class UOPerfSerializer(serializers.ModelSerializer):
     class Meta:
         model = perf.uo_perf
