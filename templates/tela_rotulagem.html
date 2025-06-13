@@ -437,6 +437,30 @@ function formatadorLegenda(data){ // Formata a legenda dos gráficos
     if (data.x == null) return html; // no selection
 	return data.series.map(v => "<b>" + v.labelHTML  + "</b>" + ': ' + v.yHTML).join(' ') + ' em ' + data.xHTML;
 }
+function getColorForRotulo(rotulo) {
+    switch(rotulo) {
+        case "NORMAL": return "rgba(0,255,0,0.5)";         // Verde claro
+        case "TRANSIENT": return "rgba(255,255,0,0.5)";     // Amarelo
+        case "STEADY STATE": return "rgba(255,0,0,0.5)";    // Vermelho
+        case "UNKNOWN": return "rgba(245,245,245,0.5)";     // Branco acinzentado
+        default: return "rgba(255,255,255,0.5)";            // Branco
+    }
+}
+function getColorForEstado(estado) {
+    switch(estado) {
+        case "OPEN": return "rgba(0,128,0,0.7)";
+        case "SHUT-IN": return "rgba(128,128,128,0.7)";
+        case "FLUSHING DIESEL": return "rgba(128,0,0,0.7)";
+        case "FLUSHING GAS": return "rgba(128,128,0,0.7)";
+        case "BULLHEADING": return "rgba(0,128,128,0.7)";
+        case "CLOSED WITH DIESEL": return "rgba(192,192,192,0.7)";
+        case "CLOSED WITH GAS": return "rgba(0,255,255,0.7)";
+        case "RESTART": return "rgba(255,0,255,0.7)";
+        case "DEPRESSURIZATION": return "rgba(219,147,112,0.7)";
+        case "UNKNOWN": return "rgba(245,245,245,0.7)";
+        default: return "rgba(255,255,255,0.7)";
+    }
+}
 function renderizarGraficos(){ // Renderiza gráficos das variáveis selecionadas
 	//limpa as divs
 	content='' 
@@ -864,72 +888,34 @@ function confirmarAdicionarAmostra(){ // Confirma e adiciona uma amostra ao conj
 		}
 	}
 }
-function atualizarRotulosGraficos(){ // Atualiza os gráficos com os rótulos de instância
-	for (i in gs){
-		var grafico=gs[i]
-		grafico.updateOptions({
-			//labelsUTC: true,
-			underlayCallback: function(canvas, area, me){				
-				for (j in lista_rotulos){
-					// console.log('Em atualizarRotulosGraficos lista_rotulos[j]: ')
-					// console.log('inicio: ',lista_rotulos[j].inicio)
-					// console.log('fim: ',lista_rotulos[j].fim)
-					// console.log('inicio toISOString',lista_rotulos[j].inicio.toISOString())
-					var bottom_left=me.toDomCoords(lista_rotulos[j].inicio,Math.min(data_valores_vi[i]));
-					var top_right=me.toDomCoords(lista_rotulos[j].fim, Math.max(data_valores_vi[i]));
-					// console.log('bL: ', bottom_left, 'tR: ', top_right)				
-					// console.log('L: ', me.toDomXCoord(lista_rotulos[j].inicio))
-					// console.log('R: ', me.toDomXCoord(lista_rotulos[j].fim))
-					// console.log('LData: ', new Date(me.toDataXCoord(bottom_left[0])))
-					// Colore fundo em função do rótulo de evento (100% da área)
-					var left=bottom_left[0]
-					var right=top_right[0]
-					if (lista_rotulos[j].rotulo=="NORMAL"){
-						canvas.fillStyle="rgba(0,255,0,1)"								// Lime
-					}else if (lista_rotulos[j].rotulo=="TRANSIENT"){
-						canvas.fillStyle="rgba(255,255,0,1)"							// Yellow
-					}else if (lista_rotulos[j].rotulo=="STEADY STATE"){ 
-						canvas.fillStyle="rgba(255,0,0,1)"								// Red
-					}else if (lista_rotulos[j].rotulo=="UNKNOWN"){ 
-						canvas.fillStyle="rgba(245,245,245,1)"							// White smoke
-					}else{
-						canvas.fillStyle="rgba(255,255,255,1)"							// White
-					}
-					canvas.fillRect(left, area.y, right-left, area.h)
-					// console.log(left, area.y, right-left, area.h)
+function atualizarRotulosGraficos() {
+    for (let i in gs) {
+        let grafico = gs[i];
+        grafico.updateOptions({
+            underlayCallback: function (canvas, area, me) {
+                for (let j in lista_rotulos) {
+                    let bottom_left = me.toDomCoords(lista_rotulos[j].inicio, Math.min(...data_valores_vi[i]));
+                    let top_right = me.toDomCoords(lista_rotulos[j].fim, Math.max(...data_valores_vi[i]));
+                    let left = bottom_left[0];
+                    let right = top_right[0];
 
-					// Colore fundo em função do estado de poço (sobreescreve 50% superior da área)
-					if (lista_rotulos[j].estado_poco=="OPEN"){
-						canvas.fillStyle="rgba(0,128,0,1)"								// Green
-					}else if (lista_rotulos[j].estado_poco=="SHUT-IN"){
-						canvas.fillStyle="rgba(128,128,128,1)"							// Gray
-					}else if (lista_rotulos[j].estado_poco=="FLUSHING DIESEL"){
-						canvas.fillStyle="rgba(128,0,0,1)"								// Maroon
-					}else if (lista_rotulos[j].estado_poco=="FLUSHING GAS"){
-						canvas.fillStyle="rgba(128,128,0,1)"							// Olive
-					}else if (lista_rotulos[j].estado_poco=="BULLHEADING"){
-						canvas.fillStyle="rgba(0,128,128,1)"							// Teal
-					}else if (lista_rotulos[j].estado_poco=="CLOSED WITH DIESEL"){
-						canvas.fillStyle="rgba(192,192,192,1)"							// Silver
-					}else if (lista_rotulos[j].estado_poco=="CLOSED WITH GAS"){
-						canvas.fillStyle="rgba(0,255,255,1)"							// Cyan 
-					}else if (lista_rotulos[j].estado_poco=="RESTART"){
-						canvas.fillStyle="rgba(255,0,255,1)"							// Magenta
-					}else if (lista_rotulos[j].estado_poco=="DEPRESSURIZATION"){
-						canvas.fillStyle="rgba(219,147,112,1)"							// Bronze					
-					}else if (lista_rotulos[j].estado_poco=="UNKNOWN"){
-						canvas.fillStyle="rgba(245,245,245,1)"							// White smoke
-					}else{
-						canvas.fillStyle="rgba(255,255,255,1)"							// White
-					}
+                    // Dimensões separadas
+                    let top_start = area.y;
+                    let top_height = area.h / 2;
+                    let bottom_start = area.y + area.h / 2;
+                    let bottom_height = area.h / 2;
 
-          if (lista_rotulos[j].estado_poco){
-            canvas.fillRect(left, area.y, right-left, area.h/2)					
-          }
-				}	
-			}
-		})
-	}
+                    // Camada 1: Estado do poço (parte superior)
+                    canvas.fillStyle = getColorForEstado(lista_rotulos[j].estado_poco);
+                    canvas.fillRect(left, top_start, right - left, top_height);
+
+                    // Camada 2: Rótulo de evento (parte inferior)
+                    canvas.fillStyle = getColorForRotulo(lista_rotulos[j].rotulo);
+                    canvas.fillRect(left, bottom_start, right - left, bottom_height);
+                }
+            }
+        });
+    }
 }
 function atualizarTabelaRotulos(){ // Atualiza a tabela de rótulos com os novos dados
 	let content = "";
